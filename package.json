@@ -1,0 +1,26 @@
+{
+  "name": "bidnepal",
+  "version": "1.0.0",
+  "description": "## Getting Started",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../bidnepal-frontend && pnpm install",
+    "dev-all": "concurrently \"cd backend && npm run dev\" \"cd bidnepal-frontend && pnpm dev\"",
+    "build-all": "cd bidnepal-frontend && pnpm build",
+    "start-all": "concurrently \"cd backend && npm start\" \"cd bidnepal-frontend && pnpm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaceDE/BidNepal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaceDE/BidNepal/issues"
+  },
+  "homepage": "https://github.com/PaceDE/BidNepal#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

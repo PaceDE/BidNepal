@@ -1,36 +1,72 @@
-# Frontend
+# BidNepal
+
+A full-stack bidding platform built with Next.js (frontend) and Node.js/Express (backend).
+
+## Tech Stack
+
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express
+- **Package Manager**: pnpm for frontend, npm for backend and root
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (version 18 or higher)
+- pnpm (for frontend)
+- npm (for backend)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/PaceDE/BidNepal.git
+   cd BidNepal
+   ```
+
+2. Install all dependencies:
+   ```bash
+   npm run install-all
+   ```
+
+### Running the Application
+
+To run both frontend and backend concurrently:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev-all
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start:
+- Backend server (check backend configuration for port)
+- Frontend on http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Individual Services
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Backend
+```bash
+cd backend
+npm run dev  # Development with nodemon
+npm start    # Production
+```
 
-## Learn More
+#### Frontend
+```bash
+cd bidnepal-frontend
+pnpm dev     # Development
+pnpm build   # Build for production
+pnpm start   # Start production server
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+BidNepal/
+├── backend/          # Express.js API server
+├── bidnepal-frontend/ # Next.js frontend application
+├── package.json      # Root scripts for managing both services
+└── README.md
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ISC
