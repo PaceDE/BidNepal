@@ -1,9 +1,13 @@
 import app from '@/app.js';
+import dotenv from 'dotenv';
 import { createServer } from 'http';
+import '@/config/email.js';
+import '@/worker/emailWorker.js'
 
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-// Create server instance to attack socket later.
+// Create server instance to attach socket later.
 const server = createServer(app);
 
 server.listen(PORT,()=>{
