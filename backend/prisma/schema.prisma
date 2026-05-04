@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/* ===================== ENUMS ================== */
+enum Role {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum EmailVerificationType{
+  EMAIL
+  PASSWORD_RESET
+}
+enum OTPVerificationType {
+  PHONE
+  PASSWORD_RESET
+}
+
+/* ===================== Model ================== */
+
+model User {
+  id  String @id @default(cuid())
+  email String  @unique
+  password  String?
+  googleId  String? @unique
+  role Role @default(USER) 
+  status UserStatus @default(ACTIVE)
+  emailVerified Boolean @default(false)
+  phoneVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile?
+  emailVerifications EmailVerification[]
+  otpVerifications OtpVerification[]
+  verificationSession VerificationSession[]
+}
+
+model Profile {
+  id  String @id @default(cuid())
+  userId String @unique
+  user  User @relation(fields:[userId], references: [id])
+
+  firstName String
+  lastName String
+  avatar String?
+  phone String
+  country String
+}
+
+// External — email links (no userId in lookup)
+model EmailVerification {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  type      EmailVerificationType
+  token     String
+  expiresAt DateTime
+
+  @@unique([userId, type])
+  @@unique([type, token])    // globally unique — lookup by type + token only
+}
+
+// Internal — OTP, in-app (userId always known)
+model OtpVerification {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  type      OTPVerificationType
+  token     String
+  expiresAt DateTime
+
+  @@unique([userId, type])   // lookup by userId + type + token
+}
+
+model VerificationSession {
+  sessionId String @id
+  userId  String
+  expiresAt DateTime
+  
+  user User @relation(fields:[userId], references:[id])
+}
