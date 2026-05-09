@@ -7,6 +7,6 @@ export const hashValue = async (value: string, saltRounds: number = 10): Promise
 }
 
 export const generateRandomToken = (length: number = 64): string => {
-    const token = crypto.randomBytes(length*4).toString('hex');
+    const token = crypto.randomBytes(length/2).toString('hex');
     return token;
 }
