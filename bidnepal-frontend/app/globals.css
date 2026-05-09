@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-h1,h2,h3,h4,h5,h6 {
-  font-family: var(--font-dm-sans);
-}
-
 :root {
   --background-primary: #ede9e0;
   --background-secondary: #F4F2EB;
@@ -25,7 +21,6 @@ h1,h2,h3,h4,h5,h6 {
   --font-dm-sans: 'DM Sans', sans-serif; /*Heading*/
   --font-geist-sans: 'Geist Sans', sans-serif;
   --font-geist-mono: 'Geist Mono', monospace;
-  font-family: var(--font-dm-sans);
 }
 
 @theme inline {
@@ -56,6 +51,5 @@ h1,h2,h3,h4,h5,h6 {
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-dm-sans);
 }
-
-

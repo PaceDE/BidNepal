@@ -1,5 +1,4 @@
-import React from 'react'
-import NavButton from '../../atoms/NavButton'
+import NavLink from '../../atoms/NavLink'
 
 const navItems = [
     { label: "Auctions", href: "/" },
@@ -12,9 +11,9 @@ const Navbar = () => {
     return (
         <div className='flex justify-center w-full gap-4'>
             {navItems.map((item) => (
-                <NavButton key={item.href} to={item.href}>
+                <NavLink key={item.href} to={item.href}>
                     {item.label}
-                </NavButton>
+                </NavLink>
             ))}
         </div>
     )

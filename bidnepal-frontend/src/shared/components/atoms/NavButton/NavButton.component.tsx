@@ -1,27 +1,16 @@
-"use client";
-
-import { usePathname, useRouter } from "next/navigation";
 import { NavButtonProps } from "./";
+import Link from "next/link";
 
 const NavButton = ({
   children, 
   to, 
-  activeClass = "bg-theme text-white", 
-  inActiveClass = "text-secondary hover:text-theme ",
   style, 
-  onClick
 }:NavButtonProps) => {
-    const router = useRouter();
-    const pathname = usePathname();
-    const isActive = pathname === to;
-    
-    const handleNavigation = () => {
-       router.push(to);
-    }
+  
   return (
-    <button className={`rounded-2xl px-4 py-1 ${isActive ? activeClass : inActiveClass} ${style || ""}`} onClick={handleNavigation}>
+    <Link href={to} className={`bg-theme text-white border-2 border-border-primary rounded-2xl px-4 py-1 hover:bg-theme-dark ${style || ""}`}>
         {children}
-    </button>
+    </Link>
   )
 }
 

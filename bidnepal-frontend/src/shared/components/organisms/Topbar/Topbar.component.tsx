@@ -11,7 +11,7 @@ const Topbar = () => {
   const height = Layout.navBarHeight;
   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className={`w-full fixed z-50`}>
+    <div className={`bg-card w-full sticky top-0 z-50`}>
       <div className={`border-theme border-b-2 px-4 py-7 flex justify-between items-center ${height}`}>
         <div className='flex items-center gap-4'>
           <label htmlFor="menu-toggle" className="cursor-pointer md:hidden">

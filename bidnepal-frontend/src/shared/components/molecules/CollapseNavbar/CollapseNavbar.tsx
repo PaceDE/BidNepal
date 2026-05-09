@@ -1,5 +1,4 @@
-import React from 'react'
-import NavButton from '../../atoms/NavButton'
+import NavLink from '../../atoms/NavLink'
 
 const navItems = [
     { label: "Auctions", href: "/" },
@@ -13,9 +12,9 @@ const CollapseNavbar = () => {
         <div className='flex flex-col justify-center w-full gap-2'>
             {navItems.map((item) => (
                 <div className="px-4 py-2 border-b-2 border-border-divider " key={item.href}>
-                    <NavButton to={item.href} activeClass='text-theme'>
+                    <NavLink to={item.href} activeClass='text-theme'>
                         {item.label}
-                    </NavButton>
+                    </NavLink>
                 </div>
             ))}
         </div>
