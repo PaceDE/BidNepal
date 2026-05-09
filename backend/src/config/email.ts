@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 // Verify connection asynchronously without blocking module load
 transporter.verify()
   .then(() => {
-    console.log("Server is ready to take our messages");
+    console.log("Mail transporter is ready to send emails");
   })
   .catch((err) => {
     console.error("Verification failed:", err);

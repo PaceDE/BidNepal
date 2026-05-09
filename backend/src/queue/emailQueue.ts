@@ -13,3 +13,10 @@ export const emailQueue = new Queue('emails',{
         removeOnFail:true
     }
 })
+
+emailQueue.on('error', (err) => {
+    const code = (err as any)?.code;
+    if (code !== 'ECONNREFUSED' && code !== 'ECONNABORTED') {
+        console.error('Email queue unexpected error:', err.message);
+    }
+});
