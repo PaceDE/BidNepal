@@ -3,7 +3,7 @@ import type { CookieOptions } from "@/shared/types/cookie.types.js"
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === "production",
   sameSite: "none",
   maxAge: 15 * 60 * 1000
 }
@@ -15,10 +15,11 @@ const cookieService = {
     value: string,
     options?: CookieOptions
   ) => {
-    return res.cookie(name, value, {
+    res.cookie(name, value, {
       ...cookieOptions,
       ...options
     })
+    return res;
   }
 }
 

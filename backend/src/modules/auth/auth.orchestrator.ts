@@ -1,27 +1,64 @@
-import  userService  from "@/modules/auth/auth.services.js";
-import verificationService from "@/shared/services/verification.service.js";
-import type { CreateUserDTO, CreateUserResponseDTO } from "@/modules/auth/auth.types.js"
+import userService from "@/modules/auth/auth.services.js";
+import type { CreateUserDTO, LoginDTO } from "@/modules/auth/auth.types.js"
+import sessionService from "@/shared/services/session.service.js";
+import emailService from "@/shared/services/email.service.js";
+import authService from "@/modules/auth/auth.services.js";
+import tokenService from "@/shared/services/token.service.js";
+import { AppError } from "@/shared/errors/AppError.js";
+import userRepository from "../user/user.repository.js";
+import { SessionType } from "@prisma/client";
+import tokenRepository from "@/shared/repository/token.repository.js";
+import sessionRepository from "@/shared/repository/session.repository.js";
 
-const AuthOrchestrator = {
+const refreshTokenExpiryInMinutes = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+const authOrchestrator = {
     registerFlow: async (data: CreateUserDTO): Promise<{
-        user: CreateUserResponseDTO,
-        session: {
-            sessionId: string;
-            expiresAt: Date;
-            userId: string;
-        }
+        sessionId: string;
+        expiresAt: Date;
+        userId: string;
     }> => {
         const user = await userService.registerUser(data);
 
-        const session = await verificationService.createSession(user.id, user.email);
+        const session = await sessionService.savependingVerificationSession(user.id, user.email);
 
         try {
-            await verificationService.initiateEmailVerification(user.id, user.email);
+            await emailService.initiateEmailVerification(user.id, user.email);
         } catch (err: any) {
             console.error("Failed to create Email Verification Link", err)
         }
 
-        return { user, session }
+        return session;
+    },
+
+    loginFlow: async (data: LoginDTO) => {
+
+        const user = await authService.validateUserCredentials(data.email, data.password);
+        if (!user) throw new AppError("Invalid credentials", 401);
+        const accessToken = tokenService.generateAccessToken(user);
+        const refreshToken = tokenService.generateRefreshToken(user);
+
+        await sessionService.saveAuthenticationSession(user.id, refreshToken, refreshTokenExpiryInMinutes);
+
+        return { accessToken, refreshToken, user };
+
+    },
+    tokenRefreshFlow: async (token: string) => {
+
+        const decoded = tokenService.verifyRefreshToken(token);
+        const user = await userRepository.findUserById(decoded.id);
+        if (!user)
+            throw new AppError("Invalid token", 401)
+
+        const accessToken = tokenService.generateAccessToken(user);
+        const refreshToken = tokenService.generateRefreshToken(user);
+
+        await sessionService.saveAuthenticationSession(user.id, refreshToken, refreshTokenExpiryInMinutes);
+
+        await sessionService.deleteSessionByIdAndType(token, SessionType.AUTHENTICATION);
+
+        
+        return { user, accessToken, refreshToken };
     }
 }
-export default AuthOrchestrator;
+export default authOrchestrator;

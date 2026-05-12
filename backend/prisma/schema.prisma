@@ -31,6 +31,12 @@ enum OTPVerificationType {
   PASSWORD_RESET
 }
 
+enum SessionType {
+  PENDING_VERIFICATION
+  AUTHENTICATION
+}
+
+
 /* ===================== Model ================== */
 
 model User {
@@ -49,7 +55,7 @@ model User {
   profile Profile?
   emailVerifications EmailVerification[]
   otpVerifications OtpVerification[]
-  verificationSession VerificationSession[]
+  sessions Session[]
 }
 
 model Profile {
@@ -58,7 +64,7 @@ model Profile {
   user  User @relation(fields:[userId], references: [id])
 
   firstName String
-  lastName String
+  lastName String?
   avatar String?
   phone String
   country String
@@ -72,6 +78,7 @@ model EmailVerification {
   type      EmailVerificationType
   token     String
   expiresAt DateTime
+  createdAt DateTime @default(now())
 
   @@unique([userId, type])
   @@unique([type, token])    // globally unique — lookup by type + token only
@@ -85,14 +92,17 @@ model OtpVerification {
   type      OTPVerificationType
   token     String
   expiresAt DateTime
+  createdAt DateTime @default(now())
 
   @@unique([userId, type])   // lookup by userId + type + token
 }
 
-model VerificationSession {
-  sessionId String @id
-  userId  String
+model Session {
+  sessionId String      @id
+  userId    String
+  email     String?     // only needed for PENDING_VERIFICATION
+  type      SessionType @default(AUTHENTICATION)
   expiresAt DateTime
-  
-  user User @relation(fields:[userId], references:[id])
+
+  user User @relation(fields: [userId], references: [id])
 }

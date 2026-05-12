@@ -1,7 +1,8 @@
+import { Prisma } from "@prisma/client";
 import prisma from "@/shared/lib/prisma.js";
-import type { CreateUserDTO } from "@/modules/auth/auth.types.js";
+import type { CreateUserDTO, UserWithProfile } from "@/modules/auth/auth.types.js";
 
-const userRepository = {
+const authRepository = {
     createUser: async (user: CreateUserDTO) => {
         const { email, firstName, lastName, password, country, phone } = user;
 
@@ -17,27 +18,14 @@ const userRepository = {
                         phone
                     }
                 },
-                verification: {
-                    create: {}
-                }
             },
-            include: {
-                profile: true,
-                verification: true
-            }
         });
 
         return newUser;
-    },
-
-    findUserByEmail: async (email: string) => {
-        return prisma.user.findUnique({
-            where: { email }
-        })
     }
 }
 
-export default userRepository;
+export default authRepository;
 
 
 
