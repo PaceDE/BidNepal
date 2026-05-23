@@ -19,10 +19,14 @@ router.get(
 );
 
 router.post(
-    "/resend-verification",
+    "/resend-email-verification",
     authController.resendEmailVerification
 );
 
-router.post("/verify-email", authController.verifyEmail);
+router.get("/verify-email/confirm", authController.verifyEmail);
+
+router.get("/google", authController.getGoogleLogin);
+
+router.get("/google/callback", authController.googleCallback);
 
 export default router;

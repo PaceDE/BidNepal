@@ -2,7 +2,7 @@
 
 import { Controller, FieldValues } from "react-hook-form";
 import Input from "@/shared/components/atoms/Input";
-import { camelCaseToSentence } from "@/lib/utils/string";
+import { camelCaseToSentence } from "@/shared/utils/string";
 import { InputFieldProps } from "./InputField.types";
 import Text from "../../atoms/Text/Text.component";
 

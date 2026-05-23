@@ -4,12 +4,15 @@ export function toLoginDTO(accessToken:string,user:UserWithProfile): LoginRespon
     return {
         accessToken,
         user:{
-            firstName: user.profile?.firstName ?? null,
+            firstName: user?.profile?.firstName ?? null,
             email: user.email,
             role: user.role,
+            avatar: user?.profile?.avatar ?? null,
             userStatus: user.status,
             emailVerified: user.emailVerified,
-            phoneVerified: user.phoneVerified
+            phoneVerified: user.phoneVerified,
+            firstLogin:user?.profile?.firstLogin ?? true,
+            profileSetup:user?.profile?.profileSetup ?? false,
         }   
     }
 }

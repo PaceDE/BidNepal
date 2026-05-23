@@ -1,19 +1,19 @@
 import express from 'express';
 import cors from 'cors';
-import { errorHandler } from '@/middleware/errorHandler.js';
+import cookieParser from "cookie-parser";
+import { csrfMiddleware } from './modules/csrf/csrf.middleware.js';
 import authRouter from "@/modules/auth/auth.routes.js";
+import csrfRouter from "@/modules/csrf/csrf.routes.js";
+import { errorHandler } from '@/middleware/errorHandler.js';
 
 const allowedOrigins= process.env.CLIENT_URL?.split(',') || [];
 const app = express();
 app.use(cors({
-    origin: function(origin,callback){
-        if(!origin || allowedOrigins.includes(origin)){
-            callback(null,true);
-        } else {
-            callback(new Error('The origin is not alloweds by CORS.'))
-        }
-    }
+    origin: 'http://localhost:3000',
+    credentials: true,
 }));
+
+app.use(cookieParser());
 
 app.use(express.json());
 
@@ -27,6 +27,8 @@ app.get('/health', (_, res) => {
          uptime: process.uptime(),
         });
 });
+
+app.use('/api/csrf',csrfRouter);
 
 app.use('/api/auth',authRouter);
 

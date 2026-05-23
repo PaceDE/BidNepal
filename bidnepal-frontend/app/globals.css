@@ -14,9 +14,15 @@
   --theme:#D85A30;
   --theme-light:#FAECE7;
   --theme-dark:#993C1D;
-  --green:#1D9E75;
-  --green-light:#E1F5EE;
+  --green:#82c285;
+  --green-light:#e6f4e7;
   --green-dark:#0F6E56;
+  --warning:#f2ba62;
+  --warning-light:#fff1dc;
+  --error:#fb8a71;
+  --error-light:#ffe6df;
+  --info:#66ace9;
+  --info-light:#e0eefb;
   --font-syne: 'Syne', sans-serif;       /*Body*/
   --font-dm-sans: 'DM Sans', sans-serif; /*Heading*/
   --font-geist-sans: 'Geist Sans', sans-serif;
@@ -39,6 +45,12 @@
   --color-green: var(--green);
   --color-green-light: var(--green-light);
   --color-green-dark: var(--green-dark);
+  --color-orange: var(--warning);
+  --color-orange-light: var(--warning-light);
+  --color-red: var(--error);
+  --color-red-light: var(--error-light);
+  --color-blue: var(--info);
+  --color-blue-light: var(--info-light);
   --color-foreground: var(--foreground);
 
   /* Font mappings - className will override element defaults */

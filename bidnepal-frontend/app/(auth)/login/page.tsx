@@ -1,3 +1,4 @@
+"use client";
 import LoginTemplate from "@/features/auth/templates/LoginTemplate";
 
 

@@ -2,8 +2,8 @@ import { LogoProps } from "./";
 
 const Logo = ({ style }: LogoProps) => {
   return (
-    <div aria-label="logo - BidNepal" className={style}>
-        <span className="text-lg font-bold font-syne text-theme">Bid<span className="text-black">Nepal</span></span>
+    <div aria-label="logo - BidNepal">
+        <span className={`text-lg font-extrabold font-syne text-theme ${!!style ? style : ""}`}>Bid<span className="text-black">Nepal</span></span>
     </div>
   )
 }

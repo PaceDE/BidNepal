@@ -1,15 +1,19 @@
 "use client";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Logo from '../../atoms/Logo/Logo.component'
 import Navbar from '../../molecules/Navbar'
 import AuthButtons from '../../molecules/AuthButtons'
 import CollapseNavbar from '../../molecules/CollapseNavbar/CollapseNavbar'
-import { Layout } from '@/enums/layout.enums'
+import { Layout } from '@/shared/enums/layout.enums'
 import HamburgerMenu from '../../atoms/HamburgerMenu/HamburgerMenu.component'
 
 const Topbar = () => {
   const height = Layout.navBarHeight;
   const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(()=>{
+    console.log("sdj")
+
+  },[])
   return (
     <div className={`bg-card w-full sticky top-0 z-50`}>
       <div className={`border-theme border-b-2 px-4 py-7 flex justify-between items-center ${height}`}>

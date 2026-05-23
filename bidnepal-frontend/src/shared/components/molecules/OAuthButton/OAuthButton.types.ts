@@ -5,4 +5,5 @@ export interface OAuthButtonProps {
   provider: 'google' | 'facebook' | 'yahoo';
   icon: string
   onClick?: () => void;
+  lock:boolean
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Controller, FieldValues, Path } from "react-hook-form";
-import { camelCaseToSentence } from "@/lib/utils/string";
+import { camelCaseToSentence } from "@/shared/utils/string";
 import { PhoneFieldProps } from "./PhoneField.types";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";

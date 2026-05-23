@@ -26,8 +26,19 @@ export interface LoginResponseDTO {
         firstName: string | null;
         email: string;
         role: string;
+        avatar: string | null;
         userStatus: string;
         emailVerified: boolean;
         phoneVerified: boolean;
+        firstLogin: boolean;
+        profileSetup: boolean;
     }
 }
+
+export interface googleLoginPayload {
+    googleId: string,
+    email:string,
+    firstName:string | null;
+    lastName:string | null;
+    avatar:string | null
+} 

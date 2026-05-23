@@ -4,18 +4,26 @@ import type { CreateUserDTO, UserWithProfile } from "@/modules/auth/auth.types.j
 
 const userRepository = {
 
-    findUserById: async (id:string) =>{
+    findUserById: async (id: string) => {
         return prisma.user.findUnique({
-            where:{id},
-            include:{profile:true}
+            where: { id },
+            include: { profile: true }
         })
 
     },
 
+
     findUserByEmail: async (email: string) => {
         return prisma.user.findUnique({
             where: { email },
-            include: {  profile: true }
+            include: { profile: true }
+        })
+    },
+
+    findUserByGoogleId: async (id: string) => {
+        return prisma.user.findUnique({
+            where: { googleId: id },
+            include: { profile: true }
         })
     }
 }

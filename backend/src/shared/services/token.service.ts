@@ -73,24 +73,11 @@ const tokenService = {
     verifyEmailToken: async (token: string, type: EmailVerificationType): Promise<boolean> => {
         const record = await tokenRepository.findEmailTokenByType(token, type);
 
-        if (!record) throw new Error("Invalid token");
-        if (record.expiresAt < new Date()) throw new Error("The token is already expires. Please try again.");
+        if (!record) throw new AppError("Invalid token",400);
+        if (record.expiresAt < new Date()) throw new AppError("The token is already expires. Please try again.", 422);
 
         await tokenRepository.deleteEmailTokenByType(token, type);
         return true;
-    },
-    refreshAccessToken: async (token: string) => {
-        await sessionService.getSessionByIdAndType(token,SessionType.AUTHENTICATION);
-
-        const decoded = tokenService.verifyRefreshToken(token);
-        const user = await userRepository.findUserById(decoded.id);
-        if(!user)
-            throw new AppError("Invalid token",401)
-
-        const accessToken = tokenService.generateAccessToken(user);
-        const refreshToken = tokenService.generateRefreshToken(user);
-        
-        return {accessToken,refreshToken};
     }
 }
 

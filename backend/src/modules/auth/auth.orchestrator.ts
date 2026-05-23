@@ -17,7 +17,18 @@ const authOrchestrator = {
         sessionId: string;
         expiresAt: Date;
         userId: string;
-    }> => {
+    } | void> => {
+
+        const existingUser = await userRepository.findUserByEmail(data.email);
+
+        if (existingUser) {
+            if(existingUser.password)
+                throw new AppError("Email already in use", 422);
+
+            await userService.registerUser(data);
+            return;
+        } 
+        
         const user = await userService.registerUser(data);
 
         const session = await sessionService.savependingVerificationSession(user.id, user.email);
@@ -43,12 +54,13 @@ const authOrchestrator = {
         return { accessToken, refreshToken, user };
 
     },
+    
     tokenRefreshFlow: async (token: string) => {
 
         const decoded = tokenService.verifyRefreshToken(token);
         const user = await userRepository.findUserById(decoded.id);
         if (!user)
-            throw new AppError("Invalid token", 401)
+            throw new AppError("Invalid token", 401, { clearCookie: ["_bn_refreshtoken"] });
 
         const accessToken = tokenService.generateAccessToken(user);
         const refreshToken = tokenService.generateRefreshToken(user);
@@ -57,8 +69,32 @@ const authOrchestrator = {
 
         await sessionService.deleteSessionByIdAndType(token, SessionType.AUTHENTICATION);
 
-        
+
         return { user, accessToken, refreshToken };
+    },
+
+    googleLoginFlow: async (code: any) => {
+        const { accessToken: _, idToken } = await authService.getGoogleToken(code);
+
+        const payload = await authService.verifyAndGetUserInfo(idToken);
+
+       
+        if(!payload.email || !payload.sub)
+            throw new AppError("Google Login Failed", 401);
+
+        const data = {
+            googleId:payload.sub, 
+            email:payload.email, 
+            firstName:payload.given_name ?? null, 
+            lastName:payload.family_name ?? null, 
+            avatar:payload.picture ?? null
+        }
+
+        const {user, accessToken, refreshToken} = await authService.googleLogin(data);
+
+        await sessionService.saveAuthenticationSession(user.id, refreshToken, refreshTokenExpiryInMinutes);
+
+        return {user, accessToken, refreshToken}
     }
 }
 export default authOrchestrator;

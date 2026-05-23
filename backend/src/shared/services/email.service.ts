@@ -7,7 +7,7 @@ const emailService = {
 
   initiateEmailVerification: async (userId: string, email: string) => {
     const { token, expiresIn } = await tokenService.generateEmailVerificationToken(userId);
-    const link = `${process.env.APP_URL ?? "http://localhost:3000"}/verify-email?token=${token}`
+    const link = `${process.env.APP_URL ?? "http://localhost:3000"}/verify-email/confirm?token=${token}`
     return await emailService.sendEmailVerification(email, link, expiresIn);
   },
 

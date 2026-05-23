@@ -61,20 +61,22 @@ model User {
 model Profile {
   id  String @id @default(cuid())
   userId String @unique
-  user  User @relation(fields:[userId], references: [id])
+  user  User @relation(fields:[userId], references: [id], onDelete: Cascade)
 
-  firstName String
+  firstName String?
   lastName String?
   avatar String?
-  phone String
-  country String
+  phone String?
+  country String?
+  profileSetup Boolean @default(false)
+  firstLogin Boolean @default(true)
 }
 
 // External — email links (no userId in lookup)
 model EmailVerification {
   id        String              @id @default(cuid())
   userId    String
-  user      User             @relation(fields: [userId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      EmailVerificationType
   token     String
   expiresAt DateTime
@@ -88,7 +90,7 @@ model EmailVerification {
 model OtpVerification {
   id        String              @id @default(cuid())
   userId    String
-  user      User             @relation(fields: [userId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      OTPVerificationType
   token     String
   expiresAt DateTime
@@ -104,5 +106,5 @@ model Session {
   type      SessionType @default(AUTHENTICATION)
   expiresAt DateTime
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

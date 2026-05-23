@@ -18,12 +18,13 @@ const authController = {
 
         const validationResult = authService.validateCreateUserDTO(data);
         if (!validationResult.success) {
-            throw new AppError("Validation failed", 422, validationResult.error.flatten().fieldErrors)
+            throw new AppError("Validation failed", 422, { errors: validationResult.error.flatten().fieldErrors, clearCookie: ["_bn_pendingverification"] })
         }
 
         const session = await authOrchestrator.registerFlow(data);
 
-        cookieService.setCookie(res, "_bn_pendingverification", session.sessionId)
+        if(session)
+            cookieService.setCookie(res, "_bn_pendingverification", session.sessionId)
 
         return successResponse(res, {
             message: "User Created Succesfully",
@@ -56,7 +57,7 @@ const authController = {
     refreshAccessToken: asyncHandler(async (req: Request, res: Response) => {
         const token = req.cookies._bn_refreshtoken;
         if (!token)
-            throw new AppError("Invalid or expired token", 401);
+            throw new AppError("Invalid or expired token", 401, { clearCookie: ["_bn_refreshtoken"] });
         const { accessToken, refreshToken } = await authOrchestrator.tokenRefreshFlow(token);
         const response = cookieService.setCookie(res, "_bn_refreshtoken", refreshToken, {
             maxAge: 7 * 24 * 60 * 60 * 1000
@@ -67,13 +68,14 @@ const authController = {
             statusCode: 200
         })
     }),
+
     getCurrentUser: asyncHandler(async (req: Request, res: Response) => {
         const refreshToken = req.cookies._bn_refreshtoken;
         if (!refreshToken)
-            throw new AppError("Invalid or expired token", 401);
-        
+            throw new AppError("Invalid or expired token", 401, { clearCookie: ["_bn_refreshtoken"] });
+
         const { user, accessToken } = await authService.restoreSession(refreshToken);
-        
+
         const data = toLoginDTO(accessToken, user);
         return successResponse(res, {
             data,
@@ -83,9 +85,11 @@ const authController = {
     }),
 
     getVerificationSession: asyncHandler(async (req: Request, res: Response) => {
+
         const sessionId = req.cookies._bn_pendingverification;
+
         if (!sessionId)
-            throw new AppError("Session Expired", 401)
+            throw new AppError("Session Expired", 401, { clearCookie: ["_bn_pendingverification"] })
 
         const session = await sessionService.getSessionByIdAndType(sessionId, SessionType.PENDING_VERIFICATION);
 
@@ -99,7 +103,7 @@ const authController = {
     resendEmailVerification: asyncHandler(async (req: Request, res: Response) => {
         const sessionId = req.cookies._bn_pendingverification;
         if (!sessionId)
-            throw new AppError("Session Expired", 401)
+            throw new AppError("Session Expired", 400, { clearCookie: ["_bn_pendingverification"] })
 
         const session = await sessionService.getSessionByIdAndType(sessionId, SessionType.PENDING_VERIFICATION);
 
@@ -113,17 +117,41 @@ const authController = {
 
     verifyEmail: asyncHandler(async (req: Request, res: Response) => {
 
-        const { token } = req.body;
+        const { token } = req.query;
 
-        if (!token)
-            throw new AppError("Invalid", 401)
+        if (typeof token !== 'string')
+            throw new AppError("Invalid token", 400)
 
         await tokenService.verifyEmailToken(token, EmailVerificationType.EMAIL);
+        res.clearCookie("_bn_pendingverification", { path: "/" })
         return successResponse(res, {
             message: "Email Verifivation Link Resent Succesfully",
             statusCode: 200
         })
     }),
+    getGoogleLogin: (req: Request, res: Response) => {
+
+        let url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+
+        url = authService.createGoogleLoginUrl(url);
+
+        res.redirect(url.toString());
+    },
+
+    googleCallback : asyncHandler(async (req:Request, res:Response)=>{
+        const {code} = req.query;
+
+        if(!code)
+            throw new AppError("Google Login Failed. Please try again",400);
+
+        const {user, accessToken, refreshToken} = await authOrchestrator.googleLoginFlow(code);
+
+        const response = cookieService.setCookie(res, "_bn_refreshtoken", refreshToken, {
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
+        response.redirect(process.env.CLIENT_URL || "http://localhost:3000")
+    })
 
 
 }

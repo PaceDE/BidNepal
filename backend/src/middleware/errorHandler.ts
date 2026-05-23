@@ -14,6 +14,12 @@ export const errorHandler = (err:unknown, _req: Request, res: Response, _next: N
     } else if(err instanceof Error){
         message=err.message
     }
+
+    if(err instanceof AppError && err.clearCookie){
+        err.clearCookie.forEach(cookie => {
+            res.clearCookie(cookie, {path:"/"})
+        })
+    }
         
     return res.status(statusCode).json({
         success:false,

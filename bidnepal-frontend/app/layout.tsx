@@ -3,6 +3,11 @@ import { Geist, Geist_Mono, DM_Sans, Syne } from "next/font/google";
 import "./globals.css";
 import Topbar from "@/shared/components/organisms/Topbar/Topbar.component";
 import Providers from "./provider";
+import { ToastContainer } from "@/shared/components/organisms/ToastContainer/ToastContainer";
+import PageAnimations from "@/shared/layout/PageAnimation";
+import CsrfLoader from "@/shared/lib/csrf/csrf-loaded";
+import AuthBootstrap from "@/shared/bootstrap/AuthBootsrap.tsx/AuthBootstrap";
+import AppIntro from "@/shared/components/organisms/AppIntro/App.component";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,8 +44,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="min-h-full flex flex-col">
         <Providers>
+          <AuthBootstrap />
+          <CsrfLoader />
+          <ToastContainer />
           <Topbar />
-          {children}
+          <AppIntro />
+            {children}
         </Providers>
       </body>
     </html>

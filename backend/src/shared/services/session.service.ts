@@ -19,14 +19,15 @@ const sessionService = {
     saveAuthenticationSession: async (userId: string, token: string, expiresIn: number) => {
         return await sessionRepository.saveAuthenticationSession(userId, token, expiresIn);
     },
+    
     getSessionByIdAndType: async (sessionId: string, type: SessionType) => {
         const session = await sessionRepository.getSessionByIdAndType(sessionId, type);
         if (!session)
-            throw new AppError("Session not found", 404);
+            throw new AppError("Session not found", 400, {clearCookie: ["_bn_pendingverification"]});
 
         if (session.expiresAt < new Date()) {
             await sessionRepository.deleteSessionByIdAndType(sessionId, type);
-            throw new AppError("Session expired", 401);
+            throw new AppError("Session expired", 410, {clearCookie: ["_bn_pendingverification"]});
         }
 
         return session;
