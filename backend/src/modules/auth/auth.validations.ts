@@ -20,3 +20,5 @@ export const createUserSchema = z.object({
     phone: z.string("Phone number is required")
         .min(1, "Phone number is required")
 })
+
+export const emailOTPSchema = z.string().regex(/^\d{8}$/,"Invalid OTP")

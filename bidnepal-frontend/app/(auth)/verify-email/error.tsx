@@ -14,7 +14,7 @@ const error = () => {
             type: 'error',
             message: 'Email Verification Session Expired. Please login and try again.'
         }));
-        window.location.replace('/login');
+        router.replace('/login');
 
     }, [])
 

@@ -6,7 +6,6 @@ import { successResponse } from "@/shared/utils/responseHandler.js";
 
 const csrfController = {
     getCsrfToken: asyncHandler((req: Request, res: Response) => {
-        console.log("called");
         let secret = req.cookies._bn_csrfsecret;
         let response = res;
         

@@ -4,6 +4,7 @@ export function toLoginDTO(accessToken:string,user:UserWithProfile): LoginRespon
     return {
         accessToken,
         user:{
+            id:user?.id,
             firstName: user?.profile?.firstName ?? null,
             email: user.email,
             role: user.role,

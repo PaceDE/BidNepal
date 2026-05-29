@@ -1,4 +1,6 @@
 import type { Prisma } from "@prisma/client";
+import z from "zod";
+import type { createUserSchema } from "./auth.validations.js";
 
 export type UserWithProfile = Prisma.UserGetPayload<{
     include: {
@@ -6,14 +8,7 @@ export type UserWithProfile = Prisma.UserGetPayload<{
     };
 }>;
 
-export interface CreateUserDTO {
-    email: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    country: string;
-    phone: string;
-}
+export type CreateUserDTO = z.infer<typeof createUserSchema>
 
 export interface LoginDTO {
     email: string;
@@ -23,6 +18,7 @@ export interface LoginDTO {
 export interface LoginResponseDTO {
     accessToken: string;
     user: {
+        id:string;
         firstName: string | null;
         email: string;
         role: string;

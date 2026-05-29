@@ -1,22 +1,48 @@
 "use client"
 
-import OAuthButton from "@/shared/components/molecules/OAuthButton/OAuthButton.component";
+import OAuthButton from "@/shared/components/ui/molecules/OAuthButton/OAuthButton.component";
 import RegisterForm from "../components/RegisterForm";
-import Text from "@/shared/components/atoms/Text";
-import Divider from "@/shared/components/atoms/Divider";
+import Text from "@/shared/components/ui/atoms/Text";
+import Divider from "@/shared/components/ui/atoms/Divider";
 import LoginForm from "../components/LoginForm";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAppDispatch } from "@/redux/hook";
+import { showNotification } from "@/features/toast/toast.thunk";
 
 const LoginTemplate = () => {
   const authLockRef = useRef(false);
+  const dispatch = useAppDispatch();
+  const router= useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const reason = searchParams.get('reason');
+  const redirect = searchParams.get('next') || '/';
 
   const onGoogleLogin = () => {
     if(authLockRef.current)
       return;
 
     authLockRef.current = true
-    window.location.href = "http://localhost:5000/api/auth/google"
+    window.location.href = `http://localhost:5000/api/auth/google?redirect=${redirect}`
   }
+
+   useEffect(() => {
+          if(!reason) return;
+          
+          if (reason === 'logged_out')
+              dispatch(showNotification({type: 'success',message: 'Logged Out Succesfully'}));
+          else if (reason === 'login_required')
+              dispatch(showNotification({type: 'info',message: 'Please login to continue'}));
+          else if (reason === 'session_expired')
+              dispatch(showNotification({type: 'info', message: 'Your session has expired. Please login again'}));
+          
+          else if(reason === 'registration_complete')
+              dispatch(showNotification({ type: "success", message: "Registered Succesfully, You can now log in with email or Google." }))
+
+          params.delete('reason');
+          router.replace(`/login?${params.toString()}`);
+      }, [reason,params,dispatch,router])
   
 
   return (

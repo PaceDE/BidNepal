@@ -3,6 +3,8 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import { csrfMiddleware } from './modules/csrf/csrf.middleware.js';
 import authRouter from "@/modules/auth/auth.routes.js";
+import userRouter from "@/modules/user/user.routes.js"
+import fileRouter from "@/modules/file/file.routes.js";
 import csrfRouter from "@/modules/csrf/csrf.routes.js";
 import { errorHandler } from '@/middleware/errorHandler.js';
 
@@ -31,6 +33,10 @@ app.get('/health', (_, res) => {
 app.use('/api/csrf',csrfRouter);
 
 app.use('/api/auth',authRouter);
+
+app.use('/api/user',userRouter);
+
+app.use('/api/file',fileRouter);
 
 app.use((_, res) => {
     res.status(404).json({ message: "Route not found" });

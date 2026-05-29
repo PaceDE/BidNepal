@@ -1,13 +1,9 @@
 import { AppError } from "../errors/AppError.js";
 import sessionRepository from "../repository/session.repository.js";
-import { EmailVerificationType, SessionType } from "@prisma/client";
+import {  SessionType } from "@prisma/client";
 import { generateRandomToken } from "../utils/crypto.js";
-import { create } from "node:domain";
-import { get } from "node:http";
 
 const pendingVerificationSessionExpiresIn = 15 * 60 * 1000; // 15 minutes in milliseconds;
-
-const emailVerification = EmailVerificationType.EMAIL;
 
 const sessionService = {
 
@@ -22,12 +18,14 @@ const sessionService = {
     
     getSessionByIdAndType: async (sessionId: string, type: SessionType) => {
         const session = await sessionRepository.getSessionByIdAndType(sessionId, type);
-        if (!session)
-            throw new AppError("Session not found", 400, {clearCookie: ["_bn_pendingverification"]});
+        const clearCookie = type === SessionType.AUTHENTICATION ? "_bn_refreshtoken" : "_bn_pendingverification"
+        if (!session){
+            throw new AppError("Session not found", 400, {clearCookie: [clearCookie]});
+        }
 
         if (session.expiresAt < new Date()) {
             await sessionRepository.deleteSessionByIdAndType(sessionId, type);
-            throw new AppError("Session expired", 410, {clearCookie: ["_bn_pendingverification"]});
+            throw new AppError("Session expired", 410, {clearCookie: [clearCookie]});
         }
 
         return session;

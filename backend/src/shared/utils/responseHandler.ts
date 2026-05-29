@@ -11,7 +11,7 @@ export const successResponse = <T>(
     options:SuccessResponseOptions<T>={}
 ) => {
     const {
-        message = "Succes",
+        message = "Success",
         statusCode = 200,
         data
     } = options

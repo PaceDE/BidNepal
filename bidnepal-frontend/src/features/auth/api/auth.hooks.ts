@@ -1,25 +1,35 @@
 "use client"
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { authApi } from "./auth.api.client";
-import { LoginDto, RegisterDto } from "../auth.types";
-import { useAppDispatch } from "@/redux/hook";
+import { AuthUser, LoginDto, RegisterDto } from "../auth.types";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setAuthState } from "../auth.slice";
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { queryClient } from "@/shared/lib/query/queryClient";
+import { AUTH_STATUS } from "../auth.constants";
+import { prefetchCsrf, removeCsrf } from "@/shared/lib/csrf/csrf";
+import { showNotification } from "@/features/toast/toast.thunk";
 
 const PUBLIC_PATH = ['/login','/register','/verify-email'];
 
 // LOGIN
 export function useLogin() {
     const dispatch = useAppDispatch();
+    const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get('next') || '/';
 
     return useMutation({
         mutationFn: (data: LoginDto) => authApi.login(data),
         onSuccess: (data) => {
-            dispatch(setAuthState(data));
+            dispatch(setAuthState({data,status:AUTH_STATUS.AUTHENTICATED}));
+            removeCsrf();
+            prefetchCsrf();
+            dispatch(showNotification({ message: "Login Successful", type: "success" }))
+            router.replace(redirect);
         },
-
     })
 }
 
@@ -35,47 +45,12 @@ export function useLogout() {
     return useMutation({
         mutationFn: () => authApi.logout(),
         onSuccess: () => {
-            window.location.replace('/login');
+            window.location.replace(`/login?reason=${encodeURIComponent("logged_out")}`)
         },
         onError: () => {
-            window.location.replace('/login');
+            window.location.replace(`/login?reason=${encodeURIComponent("logged_out")}`)
         }
     })
-}
-
-// ME to hydrae the auth state when page reload.
-export function useGetMe() {
-    const dispatch = useAppDispatch();
-    const pathname = usePathname();
-    
-    const skip = PUBLIC_PATH.some(path => pathname.startsWith(path));
-
-    const query = useQuery({
-        queryKey: ['me'],
-        queryFn: () => authApi.getMe(),
-        enabled:!skip,
-        staleTime: Infinity,
-        gcTime: Infinity,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        retry: false
-    });
-
-    useEffect(() => {
-        if (query?.data)
-            dispatch(setAuthState(query.data))
-
-    }, [query?.data])
-    return query;
-}
-
-export function prefetchMe() {
-    return queryClient.prefetchQuery({
-    queryKey: ['me'],
-    queryFn: authApi.getMe,
-    staleTime: Infinity,
-    gcTime: Infinity
-  });
 }
 
 export function useResendEmailVerification() {
@@ -83,6 +58,47 @@ export function useResendEmailVerification() {
         mutationFn: () => authApi.resendEmailVerification(),
     })
 }
+
+export function useSendEmailVerificationOtp() {
+    const dispatch = useAppDispatch();
+
+    return useMutation({
+        mutationFn: authApi.sendEmailVerificationOtp,
+
+        onSuccess: () => {
+            dispatch(
+                showNotification({
+                    message: "Email Verification OTP sent successfully",
+                    type: "success",
+                })
+            );
+        },
+    });
+}
+
+export function useVerifyEmailOtp() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const data = useAppSelector(state => state.auth);
+     const params = useSearchParams();
+    const redirect = params.get("next") 
+    const path = `/welcome${redirect ? `?next=${encodeURIComponent(redirect)}` : ""}`
+
+    return useMutation({
+        mutationFn: (otp:string) => authApi.verifyEmailVerificationOtp(otp),
+        onSuccess: ()=>{
+            dispatch(showNotification({message:"Email Verified succesfully",type:"success"}))
+            router.replace(path);
+            dispatch(setAuthState({
+                data:{
+                    user:{...data.user as AuthUser,emailVerified:true}, accessToken:data.accessToken as string
+                },
+                status:AUTH_STATUS.AUTHENTICATED
+                }
+            ))}
+    })
+}
+
 
 export function useEmailVerification(token:string) {
     const query = useQuery({
@@ -93,4 +109,40 @@ export function useEmailVerification(token:string) {
     })
     return query
 }
+
+// ME to hydrae the auth state when page reload.
+// export function useGetMe() {
+//     const dispatch = useAppDispatch();
+//     const pathname = usePathname();
+    
+//     const skip = PUBLIC_PATH.some(path => pathname.startsWith(path));
+
+//     const query = useQuery({
+//         queryKey: ['me'],
+//         queryFn: () => authApi.getMe(),
+//         enabled:!skip,
+//         staleTime: Infinity,
+//         gcTime: Infinity,
+//         refetchOnWindowFocus: false,
+//         refetchOnReconnect: false,
+//         retry: false
+//     });
+
+//     useEffect(() => {
+//         if (query?.data)
+//             dispatch(setAuthState({data:query.data, status:AUTH_STATUS.AUTHENTICATED}))
+
+//     }, [query?.data])
+//     return query;
+// }
+
+// export function prefetchMe() {
+//     return queryClient.prefetchQuery({
+//     queryKey: ['me'],
+//     queryFn: authApi.getMe,
+//     staleTime: Infinity,
+//     gcTime: Infinity
+//   });
+// }
+
 

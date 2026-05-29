@@ -34,7 +34,7 @@ export default function VerifyEmailTemplate({
 
         {/* Subtitle */}
         <p className="mb-6 text-center text-gray-600">
-          We’ve sent a verification link to
+          We've sent a verification link to
         </p>
 
         {/* Email */}
@@ -46,7 +46,7 @@ export default function VerifyEmailTemplate({
 
         {/* Info */}
         <p className="mb-6 text-center text-sm text-gray-500">
-          Didn’t receive the email? Check your spam folder or resend it below.
+          Didn't receive the email? Check your spam folder or resend it below.
         </p>
 
         {/* Button */}

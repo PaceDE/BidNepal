@@ -9,7 +9,7 @@ export const authApi = {
         }),
 
     verifyEmailConfirmation: (token: string) =>
-        serverFetch(`/auth/verify-email/confirm?token=${token}`, {
+        serverFetch(`/auth/email/linl/verify?token=${token}`, {
             method: 'GET',
             cache: 'no-store'
         }),

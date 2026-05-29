@@ -22,11 +22,12 @@ enum UserStatus {
   SUSPENDED
 }
 
-enum EmailVerificationType{
+enum LinkVerificationType{
   EMAIL
   PASSWORD_RESET
 }
 enum OTPVerificationType {
+  EMAIL
   PHONE
   PASSWORD_RESET
 }
@@ -53,7 +54,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   profile Profile?
-  emailVerifications EmailVerification[]
+  linkVerifications LinkVerification[]
   otpVerifications OtpVerification[]
   sessions Session[]
 }
@@ -66,18 +67,19 @@ model Profile {
   firstName String?
   lastName String?
   avatar String?
+  avatarId String?
   phone String?
   country String?
   profileSetup Boolean @default(false)
   firstLogin Boolean @default(true)
 }
 
-// External — email links (no userId in lookup)
-model EmailVerification {
+// External — links (no userId in lookup)
+model LinkVerification {
   id        String              @id @default(cuid())
   userId    String
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      EmailVerificationType
+  type      LinkVerificationType
   token     String
   expiresAt DateTime
   createdAt DateTime @default(now())

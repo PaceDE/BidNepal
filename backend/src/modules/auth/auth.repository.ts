@@ -5,25 +5,25 @@ import type { CreateUserDTO, googleLoginPayload, UserWithProfile } from "@/modul
 const authRepository = {
     createUser: async (user: CreateUserDTO) => {
         const { email, firstName, lastName, password, country, phone } = user;
+        const userData = {
+            email,
+            firstName,
+            lastName: lastName ?? null,
+            password,
+            country,
+            phone,
+            profileSetup:true
+        }
 
         const newUser = await prisma.user.upsert({
             where: { email },
             update: {
                 password,
-                profile: {
-                    update: {
-                        firstName, lastName, country, phone, profileSetup: true
-                    }
-                }
+                profile: { update:userData}
             },
             create: {
                 email, password,
-                profile: {
-                    create: {
-                        firstName, lastName, country, phone, profileSetup: true
-                    }
-
-                },
+                profile: { create:userData }
             }
         });
 
@@ -62,6 +62,16 @@ const authRepository = {
             include: {
                 profile: true
             }
+        })
+    },
+
+    verifyEmail: async (userId: string) => {
+        return prisma.user.update({
+            where: { id: userId },
+            data: {
+                emailVerified: true
+            },
+            include: { profile: true }
         })
     }
 }

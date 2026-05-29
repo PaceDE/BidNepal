@@ -1,10 +1,10 @@
 "use client"
 
-import OAuthButton from "@/shared/components/molecules/OAuthButton/OAuthButton.component";
+import OAuthButton from "@/shared/components/ui/molecules/OAuthButton/OAuthButton.component";
 import RegisterForm from "../components/RegisterForm";
-import Text from "@/shared/components/atoms/Text";
+import Text from "@/shared/components/ui/atoms/Text";
 import GoogleIcon from "@/assets/google-icon.svg"
-import Divider from "@/shared/components/atoms/Divider";
+import Divider from "@/shared/components/ui/atoms/Divider";
 import { useRef } from "react";
 
 const RegisterTemplate = () => {

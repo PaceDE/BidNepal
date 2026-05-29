@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
         return redirect('/');
 
     else if (!refreshToken && protectedRoutes.some((route) => path.startsWith(route)))
-       return redirect(`/login?next=${encodeURIComponent(path)}&reason=login_required`);
+       return redirect(`/login?next${encodeURIComponent(path)}&reason=login_required`);
 
 }
 

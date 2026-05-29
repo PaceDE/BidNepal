@@ -7,10 +7,12 @@ import { AppError } from "@/shared/errors/AppError.js";
 import { asyncHandler } from "@/shared/utils/asyncHandler.js";
 import authOrchestrator from "./auth.orchestrator.js";
 import sessionService from "@/shared/services/session.service.js";
-import { EmailVerificationType, SessionType } from "@prisma/client/edge";
+import { LinkVerificationType, SessionType } from "@prisma/client/edge";
 import tokenService from "@/shared/services/token.service.js";
 import emailService from "@/shared/services/email.service.js";
 import { toLoginDTO } from "./auth.dto.js";
+import userRepository from "../user/user.repository.js";
+import { emailOTPSchema } from "./auth.validations.js";
 
 const authController = {
     createUser: asyncHandler(async (req: Request, res: Response) => {
@@ -23,7 +25,7 @@ const authController = {
 
         const session = await authOrchestrator.registerFlow(data);
 
-        if(session)
+        if (session)
             cookieService.setCookie(res, "_bn_pendingverification", session.sessionId)
 
         return successResponse(res, {
@@ -54,6 +56,19 @@ const authController = {
             statusCode: 200
         })
     }),
+
+    logout: asyncHandler(async (req: Request, res: Response) => {
+        const token = req.cookies._bn_refreshtoken;
+        if (token)
+            authService.logout(token);
+
+        const cookies = Object.keys(req.cookies);
+        cookies.forEach(cookie => res.clearCookie(cookie, { path: "/" }))
+        return successResponse(res, {
+            message: "Logged out succesfully",
+        })
+    }),
+
     refreshAccessToken: asyncHandler(async (req: Request, res: Response) => {
         const token = req.cookies._bn_refreshtoken;
         if (!token)
@@ -100,14 +115,14 @@ const authController = {
         })
     }),
 
-    resendEmailVerification: asyncHandler(async (req: Request, res: Response) => {
+    resendEmailVerificationLink: asyncHandler(async (req: Request, res: Response) => {
         const sessionId = req.cookies._bn_pendingverification;
         if (!sessionId)
             throw new AppError("Session Expired", 400, { clearCookie: ["_bn_pendingverification"] })
 
         const session = await sessionService.getSessionByIdAndType(sessionId, SessionType.PENDING_VERIFICATION);
 
-        await emailService.initiateEmailVerification(session.userId, session.email as string);
+        await emailService.initiateEmailVerificationByLink(session.userId, session.email as string);
 
         return successResponse(res, {
             message: "Email Verifivation Link Resent Succesfully",
@@ -115,42 +130,92 @@ const authController = {
         })
     }),
 
-    verifyEmail: asyncHandler(async (req: Request, res: Response) => {
+    verifyEmailByLink: asyncHandler(async (req: Request, res: Response) => {
 
         const { token } = req.query;
 
         if (typeof token !== 'string')
             throw new AppError("Invalid token", 400)
 
-        await tokenService.verifyEmailToken(token, EmailVerificationType.EMAIL);
+        const userId = await tokenService.verifyEmailToken(token, LinkVerificationType.EMAIL);
+         await authService.verifyEmail(userId);
         res.clearCookie("_bn_pendingverification", { path: "/" })
         return successResponse(res, {
-            message: "Email Verifivation Link Resent Succesfully",
+            message: "Email Verified Succesfully",
             statusCode: 200
         })
     }),
+
+   sendEmailVerificationOtp: asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user!.id;
+        if(!userId)
+            throw new AppError("Unauthenticated", 401)
+
+        const user = await userRepository.findUserById(userId);
+
+        if(!user)
+            throw new AppError("User does not exist", 401)
+
+
+        const expiresIn = await emailService.initiateEmailVerificationByOTP(userId, user.email);
+
+        return successResponse(res, {
+            data:{expiresIn},
+            message: "Email Verification OTP sent Succesfully",
+            statusCode: 200
+        })
+    }),
+
+    verifyEmailByOTP: asyncHandler(async (req: Request, res: Response) => {
+
+        const userId = req.user!.id
+        if(!userId)
+            throw new AppError("Unauthenticated", 401)
+        const { otp } = req.body;
+       
+        const validation = emailOTPSchema.safeParse(otp);
+        if(!validation.success)
+            throw new AppError(validation.error.message,422);
+
+        await tokenService.verifyEmailOTP(userId, LinkVerificationType.EMAIL,otp);
+       
+        await authService.verifyEmail(userId);
+        return successResponse(res, {
+            message: "Email Verified Succesfully",
+            statusCode: 200
+        })
+    }),
+
     getGoogleLogin: (req: Request, res: Response) => {
+        const redirect =
+            typeof req.query.redirect === "string"
+                ? req.query.redirect
+                : "/";
 
         let url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
 
-        url = authService.createGoogleLoginUrl(url);
+        url = authService.createGoogleLoginUrl(url, redirect);
 
         res.redirect(url.toString());
     },
 
-    googleCallback : asyncHandler(async (req:Request, res:Response)=>{
-        const {code} = req.query;
+    googleCallback: asyncHandler(async (req: Request, res: Response) => {
+        const { code, state } = req.query;
 
-        if(!code)
-            throw new AppError("Google Login Failed. Please try again",400);
+        if (!code)
+            throw new AppError("Google Login Failed. Please try again", 400);
 
-        const {user, accessToken, refreshToken} = await authOrchestrator.googleLoginFlow(code);
+        let redirect = typeof state === "string" ? state : "/";
+        if (!redirect.startsWith("/") || redirect.startsWith("//"))
+            redirect = "/";
+
+        const { user, accessToken, refreshToken } = await authOrchestrator.googleLoginFlow(code);
 
         const response = cookieService.setCookie(res, "_bn_refreshtoken", refreshToken, {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        response.redirect(process.env.CLIENT_URL || "http://localhost:3000")
+        response.redirect(`${process.env.CLIENT_URL || "http://localhost:3000"}${redirect}`)
     })
 
 

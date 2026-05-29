@@ -18,6 +18,7 @@ export type RegisterDto = {
  * Auth User Model
  */
 export type AuthUser = {
+  id: string;
   firstName: string | null;
   email: string;
   role: string;
@@ -55,3 +56,7 @@ export interface AuthState {
 export interface getVerificationSessionResponse {
   email: string;
 }
+
+export type SendEmailOTPResponse = {
+ expiresIn:number
+};

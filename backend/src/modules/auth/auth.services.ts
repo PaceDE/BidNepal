@@ -6,6 +6,8 @@ import { AppError } from "@/shared/errors/AppError.js";
 import { compareHash, hashValue } from "@/shared/utils/crypto.js";
 import tokenService from "@/shared/services/token.service.js";
 import oauthClient from "@/config/oauthClient.js";
+import sessionService from "@/shared/services/session.service.js";
+import { SessionType } from "@prisma/client";
 
 
 const authService = {
@@ -60,13 +62,17 @@ const authService = {
     },
 
 
-    createGoogleLoginUrl: (url: URL) => {
+    createGoogleLoginUrl: (url: URL,redirect:string) => {
+       
         url.searchParams.set("client_id", process.env.GOOGLE_CLIENT_ID!);
         url.searchParams.set("redirect_uri", process.env.GOOGLE_REDIRECT_URI!);
         url.searchParams.set("response_type", "code");
         url.searchParams.set("scope", "openid email profile");
         url.searchParams.set("access_type", "offline");
         url.searchParams.set("prompt", "consent");
+        
+        if (redirect) 
+            url.searchParams.set("state", redirect);
         return url;
 
     },
@@ -144,6 +150,13 @@ const authService = {
         const refreshToken = tokenService.generateRefreshToken(user);
 
         return { user, accessToken, refreshToken };
+    }, 
+
+    logout : async (token:string) => {
+        await sessionService.deleteSessionByIdAndType(token,SessionType.AUTHENTICATION)
+    },
+    verifyEmail: async (userId: string) => {
+        return authRepository.verifyEmail(userId);
     }
 
 

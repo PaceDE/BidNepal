@@ -1,7 +1,6 @@
 import app from '@/app.js';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import '@/config/email.js';
 import '@/worker/emailWorker.js'
 
 dotenv.config();

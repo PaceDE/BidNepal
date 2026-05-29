@@ -34,7 +34,7 @@ const authOrchestrator = {
         const session = await sessionService.savependingVerificationSession(user.id, user.email);
 
         try {
-            await emailService.initiateEmailVerification(user.id, user.email);
+            await emailService.initiateEmailVerificationByLink(user.id, user.email);
         } catch (err: any) {
             console.error("Failed to create Email Verification Link", err)
         }
@@ -68,7 +68,6 @@ const authOrchestrator = {
         await sessionService.saveAuthenticationSession(user.id, refreshToken, refreshTokenExpiryInMinutes);
 
         await sessionService.deleteSessionByIdAndType(token, SessionType.AUTHENTICATION);
-
 
         return { user, accessToken, refreshToken };
     },

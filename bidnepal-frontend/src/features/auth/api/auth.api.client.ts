@@ -1,6 +1,5 @@
 import { clientFetch } from "@/shared/lib/api/clientFetch";
-import { LoginDto, AuthResponse, RegisterDto, RegisterResponse, getVerificationSessionResponse } from "../auth.types";
-import { serverFetch } from "@/shared/lib/api/serverFetch";
+import { LoginDto, AuthResponse, RegisterDto, RegisterResponse, getVerificationSessionResponse, SendEmailOTPResponse } from "../auth.types";
 
 export const authApi = {
     login: (data: LoginDto) =>
@@ -30,15 +29,25 @@ export const authApi = {
         clientFetch<AuthResponse>("/auth/me", {
             cache: 'no-store'
         }),
-    
+
     resendEmailVerification: () =>
-        clientFetch("/auth/resend-email-verification", {
+        clientFetch("/auth/email/link/send", {
             method: 'POST',
             sendAuth: false,
             refreshOn401: false,
         }),
-    verifyEmailVerification: (token:string) =>
-        clientFetch(`/auth/verify-email/confirm?token=${token}`, {
+    verifyEmailVerification: (token: string) =>
+        clientFetch(`/auth/email/link/verify?token=${token}`, {
             refreshOn401: false,
-        }),   
+        }),
+    sendEmailVerificationOtp: () =>
+        clientFetch<SendEmailOTPResponse>("/auth/email/otp/send",{
+            method: 'POST'
+        }),
+    
+    verifyEmailVerificationOtp: (otp: string) =>
+        clientFetch(`/auth/email/otp/verify`, {
+            method: 'POST',
+            body: JSON.stringify({otp})
+        }),
 }
