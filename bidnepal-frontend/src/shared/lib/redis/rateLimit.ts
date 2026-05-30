@@ -46,7 +46,7 @@ export async function rateLimit(key: string): Promise<{ allowed: boolean; mode?:
 
 }
 
-export async function useRateLimit(req: NextRequest) {
+export async function CheckRateLimit(req: NextRequest) {
     const ip = getClientIp(req);
 
     const key = ip

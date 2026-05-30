@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { useRateLimit } from "../redis/rateLimit";
+import { CheckRateLimit } from "../redis/rateLimit";
 
 const ALLOWED_HEADERS = new Set([
     "authorization",
@@ -75,7 +75,7 @@ export async function proxy(
     try {
        
 
-        const limit = await useRateLimit(req);
+        const limit = await CheckRateLimit(req);
        
         if (!limit.allowed) {
             return NextResponse.json(
