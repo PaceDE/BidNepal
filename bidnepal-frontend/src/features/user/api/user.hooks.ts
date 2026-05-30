@@ -26,8 +26,8 @@ export function useProfile() {
 export function useUpdateProfile() {
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const params = useSearchParams();
-    const redirect = params.get("next")
+    const {get} = useSearchParams();
+    const redirect = get("next")
     const path = `/verify/email${redirect ? `?next=${encodeURIComponent(redirect)}` : ""}`
 
     return useMutation({
@@ -55,8 +55,8 @@ export function useUpdateProfile() {
 
 export function useCompleteProfile() {
     const dispatch = useAppDispatch();
-    const params = useSearchParams();
-    const redirect = params.get("next") || "/";
+    const {get} = useSearchParams();
+    const redirect = get("next") || "/";
     const router = useRouter();
     return useMutation({
         mutationFn: (formData?: FormData) => userApi.completeProfile(formData),

@@ -18,8 +18,8 @@ export function useLogin() {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const searchParams = useSearchParams();
-    const redirect = searchParams.get('next') || '/';
+    const {get} = useSearchParams();
+    const redirect = get('next') || '/';
 
     return useMutation({
         mutationFn: (data: LoginDto) => authApi.login(data),
@@ -80,8 +80,8 @@ export function useVerifyEmailOtp() {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const data = useAppSelector(state => state.auth);
-     const params = useSearchParams();
-    const redirect = params.get("next") 
+     const {get} = useSearchParams();
+    const redirect = get("next") 
     const path = `/welcome${redirect ? `?next=${encodeURIComponent(redirect)}` : ""}`
 
     return useMutation({
