@@ -11,7 +11,7 @@ const useTimer = (expiresAt: number | null) => {
 
     useEffect(() => {
         // reset immediately when expiresAt changes
-        setRemainingTime(getRemainingTime());
+        setRemainingTime(() => getRemainingTime());
 
         if (!remainingTime) return;
 

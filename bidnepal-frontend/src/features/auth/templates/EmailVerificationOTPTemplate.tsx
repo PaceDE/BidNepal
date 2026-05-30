@@ -20,8 +20,6 @@ const EmailVerificationOTPTemplate = ({
     length?: number;
 }) => {
     const { mutateAsync: sendOtp, isPending: isSending, isError, } = useSendEmailVerificationOtp();
-    const hasInitialized = useRef(false);
-
     const { mutate: submitOtp, isPending: isSubmitting, } = useVerifyEmailOtp();
 
     const [otp, setOtp] = useState<string[]>(Array(length).fill(""));
@@ -31,7 +29,6 @@ const EmailVerificationOTPTemplate = ({
     const [expiresAt, setExpiresAt] = useState<number | null>(null);
 
     const remainingTime = useTimer(expiresAt);
-    console.log(isSending);
 
 
     useEffect(() => {
@@ -44,7 +41,7 @@ const EmailVerificationOTPTemplate = ({
             } catch { }
         };
         sendInitialOtp();
-    }, []);
+    }, [sendOtp,setExpiresAt]);
 
     const handleSubmit = () => {
         setValidationError(null);
