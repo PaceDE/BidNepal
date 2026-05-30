@@ -1,8 +1,8 @@
 "use client"
 
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 import { useEffect, useState } from "react"
-import Logo from "../../atoms/Logo";
+import Logo from "../../atoms/Logo/Logo.component";
 import { usePathname } from "next/navigation";
 
 const AUTH_ROUTES = ["/login", "/register", "/verify-email"]
@@ -26,11 +26,11 @@ const AppIntro = () => {
             <AnimatePresence mode="wait">
                 {!introExit && (
 
-                    <motion.div
+                    <m.div
                         key="test"
                         className="bg-primarybg absolute w-full h-full"
                     >
-                            <motion.div
+                            <m.div
                                 key="Intro"
                                 initial={{ scaleX: 0 }}
                                 animate={{ scaleX: 1 }}
@@ -40,46 +40,46 @@ const AppIntro = () => {
                             >
                                 <div className="relative bottom-15 md:bottom-30 flex flex-col justify-center items-center">
                                     {/* BALL */}
-                                    <motion.div
+                                    <m.div
                                         initial={{ y: -200, opacity: 1, scale: 1 }}
                                         animate={{ y: 0 }}
                                         transition={{ type: "spring", stiffness: 120 }}
                                         className="absolute"
                                     >
-                                        <motion.div
+                                        <m.div
                                             initial={{ opacity: 1, scale: 1 }}
                                             animate={{ opacity: 0, scale: 0 }}
                                             transition={{ delay: 0.2, duration: 0.3 }}
-                                            className="w-20 h-20  rounded-full bg-theme"
+                                            className="size-20  rounded-full bg-theme"
                                         />
-                                    </motion.div>
+                                    </m.div>
 
                                     <div className="flex items-center">
 
                                         {/* LOGO */}
-                                        <motion.div
+                                        <m.div
                                             initial={{ opacity: 0, scale: 0 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ type: "spring", delay: 0.1 }}
                                         >
                                             <Logo style="text-5xl! sm:6xl! md:text-8xl!" />
-                                        </motion.div>
+                                        </m.div>
 
                                         {/* HAMMER */}
-                                        <motion.div
+                                        <m.div
                                             initial={{ opacity: 0, rotate: 45, x: 20 }}
                                             animate={{ opacity: 1, rotate: -15, x: 0 }}
                                             transition={{ type: "spring", delay: 0.75, duration: 1 }}
                                             className="relative right-7 md:right-15 bottom-7 md:bottom-10  w-20 md:w-35"
                                         >
                                             <img src="/hammer.png" alt="hammer" className="drop-shadow-lg" />
-                                        </motion.div>
+                                        </m.div>
                                     </div>
 
                                 </div>
-                            </motion.div>
+                            </m.div>
                   
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
         </>

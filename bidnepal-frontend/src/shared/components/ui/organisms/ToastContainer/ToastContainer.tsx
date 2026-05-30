@@ -1,7 +1,7 @@
 "use client";
 import { removeToast } from "@/features/toast/toast.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { IoClose } from "react-icons/io5";
 
 const backgroundColors = {
@@ -45,7 +45,7 @@ export function ToastContainer() {
 
                         return (
 
-                            <motion.div
+                            <m.div
                                 key={toast.id}
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -57,13 +57,13 @@ export function ToastContainer() {
 
                                 <IoClose onClick = {()=>handleClose(toast.id)} className="absolute top-2 right-2 text-xl text-secondary cursor-pointer md:hidden" />
 
-                                <motion.div
+                                <m.div
                                     initial={{ width: "100%" }}
                                     animate={{ width: "0%" }}
                                     transition={{ duration: toast.duration ? toast.duration / 1000 - 1 : 3, ease: "linear" }}
                                     className={`${primaryColor} absolute bottom-0 left-0 h-1 rounded-b-xl`}
                                 />
-                            </motion.div>
+                            </m.div>
                         )
                     })}
                 </AnimatePresence>
