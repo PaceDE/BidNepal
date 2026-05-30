@@ -17,7 +17,7 @@ const AccountSetupGuard = ({ children }: { children: React.ReactNode }) => {
             return
         if (redirectTo !== pathname)
             router.replace(redirectTo);
-    }, [router, pathname, router])
+    }, [router, pathname, redirectTo])
 
 
     if (redirectTo && redirectTo !== pathname)

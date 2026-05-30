@@ -14,7 +14,7 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
             const reason = status === AUTH_STATUS.EXPIRED ? "session_expired" : "login_required";
             window.location.replace(`/login?next${encodeURIComponent(pathname)}&reason=${encodeURIComponent(reason)}`);
         }
-    }, [user])
+    }, [user,status,pathname])
 
     if (!user)
         return null;

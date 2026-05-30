@@ -16,7 +16,7 @@ const Error = () => {
         }));
         router.replace('/login');
 
-    }, [])
+    }, [dispatch, router])
 
    return null;
 }

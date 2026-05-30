@@ -16,7 +16,7 @@ const EmailVerificationTemplate = ({ success, message = "Something went wrong. P
             dispatch(showNotification({ type: "error", message }))
 
         router.replace('/login');
-    }, [success])
+    }, [success,dispatch,router,message])
 
     return null;
 }

@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 
 const useTimer = (expiresAt: number | null) => {
-    const getRemainingTime = () => {
+    const getRemainingTime = (expiresAt: number | null) => {
         if (!expiresAt) return 0;
 
         return Math.max(expiresAt - Date.now(), 0);
     };
 
-    const [remainingTime, setRemainingTime] = useState(getRemainingTime());
+    const [remainingTime, setRemainingTime] = useState(()=>getRemainingTime(expiresAt));
 
     useEffect(() => {
         // reset immediately when expiresAt changes
-        setRemainingTime(() => getRemainingTime());
-
-        if (!remainingTime) return;
+        setRemainingTime(getRemainingTime(expiresAt));
+        if(!expiresAt) return;
 
         const intervalId = setInterval(() => {
-            setRemainingTime(getRemainingTime());
+            const timeLeft = getRemainingTime(expiresAt);
+            setRemainingTime(timeLeft);
+            
+            if (timeLeft <= 0) clearInterval(intervalId);
+            
         }, 1000);
 
         return () => clearInterval(intervalId);

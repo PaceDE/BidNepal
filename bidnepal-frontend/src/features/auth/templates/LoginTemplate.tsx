@@ -15,7 +15,6 @@ const LoginTemplate = () => {
   const dispatch = useAppDispatch();
   const router= useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
   const reason = searchParams.get('reason');
   const redirect = searchParams.get('next') || '/';
 
@@ -29,6 +28,8 @@ const LoginTemplate = () => {
 
    useEffect(() => {
           if(!reason) return;
+
+           const params = new URLSearchParams(searchParams);
           
           if (reason === 'logged_out')
               dispatch(showNotification({type: 'success',message: 'Logged Out Succesfully'}));
@@ -42,7 +43,7 @@ const LoginTemplate = () => {
 
           params.delete('reason');
           router.replace(`/login?${params.toString()}`);
-      }, [reason,params,dispatch,router])
+      }, [reason,searchParams,dispatch,router])
   
 
   return (

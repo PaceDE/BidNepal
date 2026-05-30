@@ -20,7 +20,7 @@ const AppIntro = () => {
             }, 2000)
             return () => clearTimeout(timer);
         }
-    }, [])
+    }, [introExit,setIntroExit])
     return (
         <>
             <AnimatePresence mode="wait">
@@ -48,7 +48,7 @@ const AppIntro = () => {
                                     >
                                         <m.div
                                             initial={{ opacity: 1, scale: 1 }}
-                                            animate={{ opacity: 0, scale: 0 }}
+                                            animate={{ opacity: 0, scale: 0.95 }}
                                             transition={{ delay: 0.2, duration: 0.3 }}
                                             className="size-20  rounded-full bg-theme"
                                         />
@@ -58,7 +58,7 @@ const AppIntro = () => {
 
                                         {/* LOGO */}
                                         <m.div
-                                            initial={{ opacity: 0, scale: 0 }}
+                                            initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ type: "spring", delay: 0.1 }}
                                         >
