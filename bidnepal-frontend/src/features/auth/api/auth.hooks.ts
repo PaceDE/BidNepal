@@ -4,14 +4,10 @@ import { authApi } from "./auth.api.client";
 import { AuthUser, LoginDto, RegisterDto } from "../auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setAuthState } from "../auth.slice";
-import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { queryClient } from "@/shared/lib/query/queryClient";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AUTH_STATUS } from "../auth.constants";
 import { prefetchCsrf, removeCsrf } from "@/shared/lib/csrf/csrf";
 import { showNotification } from "@/features/toast/toast.thunk";
-
-const PUBLIC_PATH = ['/login','/register','/verify-email'];
 
 // LOGIN
 export function useLogin() {
