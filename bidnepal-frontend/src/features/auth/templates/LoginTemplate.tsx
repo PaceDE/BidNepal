@@ -2,8 +2,8 @@
 
 import OAuthButton from "@/shared/components/ui/molecules/OAuthButton/OAuthButton.component";
 import RegisterForm from "../components/RegisterForm";
-import Text from "@/shared/components/ui/atoms/Text";
-import Divider from "@/shared/components/ui/atoms/Divider";
+import Text from "@/shared/components/ui/atoms/Text/Text.component";
+import Divider from "@/shared/components/ui/atoms/Divider/Divider.component";
 import LoginForm from "../components/LoginForm";
 import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";

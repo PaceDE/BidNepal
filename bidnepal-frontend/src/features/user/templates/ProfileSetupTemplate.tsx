@@ -1,4 +1,4 @@
-import Text from "@/shared/components/ui/atoms/Text"
+import Text from "@/shared/components/ui/atoms/Text/Text.component"
 import ProfileUpdateForm from "../components/ProfileUpdateForm"
 
 const ProfileSetupTemplate = () => {

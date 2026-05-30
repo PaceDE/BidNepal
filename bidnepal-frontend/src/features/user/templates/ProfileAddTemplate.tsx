@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Button from "@/shared/components/ui/atoms/Button";
-import TextButton from "@/shared/components/ui/atoms/TextButton";
-import Text from "@/shared/components/ui/atoms/Text";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
+import TextButton from "@/shared/components/ui/atoms/TextButton/TextButton.component";
+import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import { Blob } from "buffer";
 import Cropper from "react-easy-crop";
 import { motion, useMotionValue } from "motion/react";

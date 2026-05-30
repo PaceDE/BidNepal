@@ -6,12 +6,8 @@ import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import { loginSchema } from "../validations/loginSchema";
 import { useLogin } from "../api/auth.hooks";
 import { LoginDto, RegisterDto } from "../auth.types";
-import { useRouter, useSearchParams } from "next/navigation";
 import { RefObject, useEffect, useState } from "react";
-import { showNotification } from "@/features/toast/toast.thunk";
-import { useAppDispatch } from "@/redux/hook";
-import { prefetchCsrf, removeCsrf } from "@/shared/lib/csrf/csrf";
-import Button from "@/shared/components/ui/atoms/Button";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
 
 
 const LoginForm = ({ authLockRef }: { authLockRef: RefObject<boolean> }) => {

@@ -1,4 +1,4 @@
-import NavLink from '../../atoms/NavLink'
+import NavLink from '../../atoms/NavLink/NavLink.component'
 
 const navItems = [
     { label: "Auctions", href: "/" },

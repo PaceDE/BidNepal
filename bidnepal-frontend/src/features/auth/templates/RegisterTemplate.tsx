@@ -2,9 +2,9 @@
 
 import OAuthButton from "@/shared/components/ui/molecules/OAuthButton/OAuthButton.component";
 import RegisterForm from "../components/RegisterForm";
-import Text from "@/shared/components/ui/atoms/Text";
+import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import GoogleIcon from "@/assets/google-icon.svg"
-import Divider from "@/shared/components/ui/atoms/Divider";
+import Divider from "@/shared/components/ui/atoms/Divider/Divider.component";
 import { useRef } from "react";
 
 const RegisterTemplate = () => {

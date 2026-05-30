@@ -1,4 +1,4 @@
-import Button from '../../atoms/Button'
+import Button from '../../atoms/Button/Button.component'
 import { OAuthButtonProps } from './OAuthButton.types'
 import { ImSpinner9 } from "react-icons/im";
 

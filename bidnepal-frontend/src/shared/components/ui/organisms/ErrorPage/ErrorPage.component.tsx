@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "@/shared/components/ui/atoms/Button";
-import TextButton from "@/shared/components/ui/atoms/TextButton";
-import Text from "@/shared/components/ui/atoms/Text";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
+import TextButton from "@/shared/components/ui/atoms/TextButton/TextButton.component";
+import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import type { ErrorPageProps } from "./ErrorPage.types";
 
 const ErrorPage = ({

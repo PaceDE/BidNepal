@@ -8,7 +8,7 @@ import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import { useRegister } from "../api/auth.hooks";
 import { useRouter } from "next/navigation";
 import { RefObject } from "react";
-import Button from "@/shared/components/ui/atoms/Button";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
 import { useAppDispatch } from "@/redux/hook";
 import { showNotification } from "@/features/toast/toast.thunk";
 

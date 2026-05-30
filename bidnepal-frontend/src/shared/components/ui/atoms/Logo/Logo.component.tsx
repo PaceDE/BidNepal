@@ -1,4 +1,4 @@
-import { LogoProps } from ".";
+import { LogoProps } from "./Logo.types";
 
 const Logo = ({ style }: LogoProps) => {
   return (

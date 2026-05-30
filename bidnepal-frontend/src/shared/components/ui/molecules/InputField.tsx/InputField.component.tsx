@@ -1,7 +1,7 @@
 "use client";
 
 import { Controller, FieldValues } from "react-hook-form";
-import Input from "@/shared/components/ui/atoms/Input";
+import Input from "@/shared/components/ui/atoms/Input/Input.component";
 import { camelCaseToSentence } from "@/shared/utils/string";
 import { InputFieldProps } from "./InputField.types";
 import Text from "../../atoms/Text/Text.component";

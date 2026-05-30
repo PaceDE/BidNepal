@@ -5,7 +5,7 @@ import { camelCaseToSentence } from "@/shared/utils/string";
 import { PhoneFieldProps } from "./PhoneField.types";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import Text from "../../atoms/Text";
+import Text from "../../atoms/Text/Text.component";
 
 const PhoneField = <T extends FieldValues> ({ 
     name, control, onCountryChange, 

@@ -1,4 +1,4 @@
-import { NavButtonProps } from ".";
+import { NavButtonProps } from "./NavButton.types";
 import Link from "next/link";
 
 const NavButton = ({

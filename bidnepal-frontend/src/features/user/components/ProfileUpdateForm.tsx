@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { profileUpdateSchema } from "../validations/profileUpdateSchema";
 import { useProfile, useUpdateProfile } from "../api/user.hooks";
 import { useEffect } from "react";
-import Button from "@/shared/components/ui/atoms/Button";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
 import { useAppSelector } from "@/redux/hook";
 import { profileUpdateForm } from "../user.types";
 import parsePhoneNumberFromString from "libphonenumber-js";

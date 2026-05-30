@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from 'react'
 import Logo from '../../atoms/Logo/Logo.component'
-import Navbar from '../../molecules/Navbar'
-import AuthButtons from '../../molecules/AuthButtons'
+import Navbar from '../../molecules/Navbar/Navbar.component'
+import AuthButtons from '../../molecules/AuthButtons/AuthButtons.component'
 import CollapseNavbar from '../../molecules/CollapseNavbar/CollapseNavbar'
 import { Layout } from '@/shared/enums/layout.enums'
 import HamburgerMenu from '../../atoms/HamburgerMenu/HamburgerMenu.component'

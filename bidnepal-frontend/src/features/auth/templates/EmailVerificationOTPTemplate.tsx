@@ -1,10 +1,10 @@
 "use client";
 
 import Otp from "@/shared/components/ui/molecules/Otp/Otp.component";
-import TextButton from "@/shared/components/ui/atoms/TextButton";
+import TextButton from "@/shared/components/ui/atoms/TextButton/TextButton.component";
 import { useEffect, useRef, useState } from "react";
-import Button from "@/shared/components/ui/atoms/Button";
-import Text from "@/shared/components/ui/atoms/Text";
+import Button from "@/shared/components/ui/atoms/Button/Button.component";
+import Text from "@/shared/components/ui/atoms/Text/Text.component";
 import {
     useSendEmailVerificationOtp,
     useVerifyEmailOtp,
