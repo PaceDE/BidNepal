@@ -58,7 +58,7 @@ const Otp = ({otp,setOtp,length}:{otp:string[],setOtp:Dispatch<SetStateAction<st
 
                         onKeyDown={(e) => onKeyPressed(e, idx)}
                         placeholder="_"
-                        className="  w-8 h-8 mr-4 flex justify-center items-center text-center outline-2 outline-theme rounded-sm focus:placeholder-transparent"
+                        className="  size-8 mr-4 flex justify-center items-center text-center outline-2 outline-theme rounded-sm focus:placeholder-transparent"
                     />
                 )
             })}

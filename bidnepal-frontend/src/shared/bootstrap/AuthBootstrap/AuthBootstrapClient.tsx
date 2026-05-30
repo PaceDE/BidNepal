@@ -16,7 +16,7 @@ const AuthBootstrapClient = ({ children, data, status }: { children: React.React
         dispatch(setAuthState({ data, status }))
         if (status === AUTH_STATUS.EXPIRED)
             dispatch(showNotification({ message: "The session has expired. Please login again.", type: 'info' }))
-    }, []);
+    }, [dispatch, data, status]);
 
     if (authStatus === AUTH_STATUS.IDLE)
         return <Loading />

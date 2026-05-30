@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, DM_Sans, Syne } from "next/font/google";
 import "./globals.css";
 import Topbar from "@/shared/components/ui/organisms/Topbar/Topbar.component";
-import Providers from "./provider";
+import AppProvider from "@/providers/AppProvider";
 import { ToastContainer } from "@/shared/components/ui/organisms/ToastContainer/ToastContainer";
 import PageAnimations from "@/shared/components/layout/PageAnimation";
 import CsrfBootstrap from "@/shared/bootstrap/CsrfBootstrap/CsrfBootstrap";
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`bg-primarybg ${geistSans.variable} ${geistMono.variable} ${dmSans.variable} ${syne.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>
+        <AppProvider>
           <CsrfBootstrap />
           <ToastContainer />
           <AuthBootstrap>
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               {children}
             </BoneyardProvider>
           </AuthBootstrap>
-        </Providers>
+        </AppProvider>
       </body>
     </html>
   );

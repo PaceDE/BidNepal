@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/redux/hook";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react"
 
-const error = () => {
+const Error = () => {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -21,4 +21,4 @@ const error = () => {
    return null;
 }
 
-export default error
+export default Error

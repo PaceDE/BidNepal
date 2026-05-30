@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
-import Button from '../../atoms/Button'
-import NavButton from '../../atoms/NavButton'
+import Button from '../../atoms/Button/Button.component'
+import NavButton from '../../atoms/NavButton/NavButton.component'
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { TbLogout } from "react-icons/tb";
 import { FaUserCircle } from "react-icons/fa"
@@ -25,7 +25,7 @@ const AuthButtons = () => {
 
   return (
     <div className='flex justify-center items-center gap-5'>
-      <div className='w-8 h-8 overflow-hidden'>
+      <div className='size-8 overflow-hidden'>
         {user?.avatar ? (
           <div className='w-full h-full rounded-full overflow-hidden'>
             <img src={user.avatar} className='w-full h-full object-contain' />

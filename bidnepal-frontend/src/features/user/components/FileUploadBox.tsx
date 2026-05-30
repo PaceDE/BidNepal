@@ -1,9 +1,9 @@
-import Text from '@/shared/components/ui/atoms/Text';
+import Text from '@/shared/components/ui/atoms/Text/Text.component';
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
 
-const FileUploadBox = ({setImage}:{setImage: Dispatch<SetStateAction<string | null>>}) => {
-     const [dragOver, setDragOver] = useState(false);
-     const fileInputRef = useRef<HTMLInputElement>(null);
+const FileUploadBox = ({ setImage }: { setImage: Dispatch<SetStateAction<string | null>> }) => {
+    const [dragOver, setDragOver] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const handleFileChange = (file: File | undefined) => {
         if (!file || !file?.type.startsWith("image/")) {
 
@@ -37,6 +37,7 @@ const FileUploadBox = ({setImage}:{setImage: Dispatch<SetStateAction<string | nu
             }} className="py-12 px-6"
         >
             <input
+                aria-label="Upload Image"
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
@@ -51,14 +52,14 @@ const FileUploadBox = ({setImage}:{setImage: Dispatch<SetStateAction<string | nu
                 onClick={handleUploadClick}
                 className="flex flex-col items-center gap-3 w-full"
             >
-                <div className="w-16 h-16 rounded-full bg-theme/10 flex items-center justify-center cursor-pointer"
+                <div className="size-16 rounded-full bg-theme/10 flex items-center justify-center cursor-pointer"
 
                 >
                     <Text variant="muted" className="text-2xl">
                         📷
                     </Text>
                 </div>
-                <div>
+                <div aria-label="Upload Image">
                     {dragOver ? (
                         <Text variant="body" className="font-medium">
                             Drop to upload

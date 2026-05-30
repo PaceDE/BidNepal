@@ -27,13 +27,14 @@ const CheckboxField = <T extends FieldValues>({
                                 </Text>
                             )}
                             <input
+                                aria-label={label || name}
                                 id={name}
                                 type="checkbox"
                                 checked={field.value}
                                 onChange={(e) => field.onChange(e.target.checked)}
                                 disabled={disabled}
                                 readOnly={readOnly}
-                                className="w-4 h-4 text-theme bg-theme"
+                                className="size-4 text-theme bg-theme"
                             />
                         </div>
                         {showError && fieldState.error && (
