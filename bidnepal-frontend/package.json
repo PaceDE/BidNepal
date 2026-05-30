@@ -9,12 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@fadi-ui/react-country-flag": "^2.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.100.9",
     "boneyard-js": "^1.8.1",
-    "csrf": "^3.1.0",
     "ioredis": "^5.10.1",
     "libphonenumber-js": "^1.12.42",
     "motion": "^12.38.0",
